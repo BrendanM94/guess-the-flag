@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap");
+
+/* Global Styles */
+html {
+    font-family: "Play", sans-serif;
+    font-size: 65%;
+    font-weight: 450;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+h1 {
+    text-align: center;
+    font-size: 3.2rem;
+    text-transform: capitalize;
+    margin-bottom: 2rem 0;
+}
+
+h3 {
+    font-size: 2.4rem;
+    text-transform: capitalize;
+    margin-bottom: 1.5rem 0;
+}
+
+.container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Media Queries */
+
+@media (min-width: 576px) {
+    .container {
+        width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        width: 1140px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container {
+        width: 1320px;
+    }
+}
