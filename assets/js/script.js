@@ -67,3 +67,11 @@ getQuestions();
 function questionNum(num) {
     countSpan.innerHTML = num;
 }
+  let myRequest = new XMLHttpRequest();
+  myRequest.onreadystatechange = function () {
+    if (this.readyState === 4 && this.status === 200) {
+      let questions = JSON.parse(this.responseText);
+      let qCount = 10;
+      questionNum(qCount);
+      questions = questions.sort(() => Math.random() - Math.random()).slice(0, 10);
+      addQuestionData(questions[currentIndex], qCount);
