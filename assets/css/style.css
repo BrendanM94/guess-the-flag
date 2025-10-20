@@ -9,6 +9,9 @@ html {
     scroll-behavior: smooth;
 }
 
+body {
+    background-color: rgb(141, 226, 43);
+}
 ul {
     list-style: none;
     margin: 0;
@@ -33,6 +36,14 @@ h3 {
     margin-bottom: 1.5rem 0;
 }
 
+.flags {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 1rem 0;
+    background-color: #fff;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+}
 .container {
     padding-left: 2rem;
     padding-right: 2rem;
