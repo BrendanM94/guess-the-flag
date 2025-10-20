@@ -1,11 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap");
 
 /* Global Styles */
-:root {
-    --violet: #8b5cf6;
-    --white: #ffffff;
-}
-
 html {
     font-family: "Play", sans-serif;
     font-size: 65%;
@@ -13,9 +8,9 @@ html {
     line-height: 1.6;
     scroll-behavior: smooth;
 }
-
+/* CSS Variables */
 body {
-    background-color: rgb(141, 226, 43);
+    background-image: url("../images/map.jpg");
 }
 ul {
     list-style: none;
@@ -88,51 +83,6 @@ h3 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 1.5rem;
 }
-/* Media Queries */
-
-@media (min-width: 576px) {
-    .container {
-        width: 540px;
-    }
-}
-
-@media (min-width: 768px) {
-    .container {
-        width: 720px;
-    }
-}
-
-@media (min-width: 992px) {
-    .container {
-        width: 960px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .container {
-        width: 1140px;
-    }
-}
-
-@media (min-width: 1400px) {
-    .container {
-        width: 1320px;
-    }
-}
-
-@keyframes zoom-in-zoom-out {
-    0% {
-        transform: scale(1, 1);
-    }
-
-    50% {
-        transform: scale(1.1, 1.1);
-    }
-
-    100% {
-        transform: scale(1, 1);
-    }
-}
 
 .flags .flag-options {
     margin-top: 2rem;
@@ -192,6 +142,52 @@ h3 {
 
 .flags .flag-options ul li.wrong {
     background-color: red;
+}
+
+/* Media Queries */
+
+@media (min-width: 576px) {
+    .container {
+        width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        width: 1140px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container {
+        width: 1320px;
+    }
+}
+
+@keyframes zoom-in-zoom-out {
+    0% {
+        transform: scale(1, 1);
+    }
+
+    50% {
+        transform: scale(1.1, 1.1);
+    }
+
+    100% {
+        transform: scale(1, 1);
+    }
 }
 
 @media (min-width: 375px) {
