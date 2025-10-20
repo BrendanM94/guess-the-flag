@@ -40,6 +40,38 @@ h3 {
     margin-right: auto;
 }
 
+.box {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 2rem;
+    background-color: #fff;
+    margin-bottom: 2rem;
+}
+
+.box .count {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: fuchsia;
+    text-transform: uppercase;
+}
+
+.flags {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 1rem 0;
+}
+
+.flags .flag-img img {
+    width: 100%;
+    height: auto;
+    animation: zoom-in-zoom-out 3s ease-in infinite;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
 /* Media Queries */
 
 @media (min-width: 576px) {
