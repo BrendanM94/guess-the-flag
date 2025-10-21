@@ -19,7 +19,7 @@ function getQuestions() {
         if (this.readyState === 4 && this.status === 200) {
             let questions = JSON.parse(this.responseText);
             //Number Of Question Each New Game
-            let qCount = 10;
+            let qCount = 5;
             questionNum(qCount);
             //Random Question Each New Game
             questions = questions
@@ -39,7 +39,7 @@ function getQuestions() {
                     //Check The Answer after 500ms
                     setTimeout(() => {
                         checkAnswer(rightAnswer, qCount);
-                    }, 500);
+                    }, 150);
 
                     setTimeout(() => {
                         //Remove Previous Image Source
