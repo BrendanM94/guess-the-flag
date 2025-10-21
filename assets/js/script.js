@@ -8,10 +8,33 @@ let scoreDiv = document.querySelector(".score");
 let correctAns = document.querySelector(".score .right span");
 let incorrectAns = document.querySelector(".score .incorrect span");
 let btnNewGame = document.querySelector("#newGame");
+/* Added restart button selector */
+let btnRestart = document.querySelector("#restartGame");
+
 
 let currentIndex = 0;
 let rightAnswers = 0;
 let wrongAnswers = 0;
+
+// Add this with your other event listeners
+btnRestart.addEventListener("click", () => {
+    // Reset all counters
+    currentIndex = 0;
+    rightAnswers = 0;
+    wrongAnswers = 0;
+    
+    // Show flag elements if they were hidden
+    if (!document.querySelector(".flag-img")) {
+        location.reload();
+        return;
+    }
+    
+    // Reset score display
+    score.innerHTML = "0";
+    
+    // Restart the questions
+    getQuestions();
+});
 
 function getQuestions() {
     let myRequest = new XMLHttpRequest();
