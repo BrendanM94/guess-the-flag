@@ -11,6 +11,11 @@ let btnNewGame = document.querySelector("#newGame");
 /* Added restart button selector */
 let btnRestart = document.querySelector("#restartGame");
 
+
+let currentIndex = 0;
+let rightAnswers = 0;
+let wrongAnswers = 0;
+
 // Add this with your other event listeners
 btnRestart.addEventListener("click", () => {
     // Reset all counters
@@ -30,12 +35,6 @@ btnRestart.addEventListener("click", () => {
     // Restart the questions
     getQuestions();
 });
-
-let currentIndex = 0;
-let rightAnswers = 0;
-let wrongAnswers = 0;
-
-
 
 function getQuestions() {
     let myRequest = new XMLHttpRequest();
