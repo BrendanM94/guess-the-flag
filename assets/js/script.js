@@ -8,10 +8,33 @@ let scoreDiv = document.querySelector(".score");
 let correctAns = document.querySelector(".score .right span");
 let incorrectAns = document.querySelector(".score .incorrect span");
 let btnNewGame = document.querySelector("#newGame");
+/* Added restart button selector */
+let btnRestart = document.querySelector("#restartGame");
+
 
 let currentIndex = 0;
 let rightAnswers = 0;
 let wrongAnswers = 0;
+
+// Add this with your other event listeners
+btnRestart.addEventListener("click", () => {
+    // Reset all counters
+    currentIndex = 0;
+    rightAnswers = 0;
+    wrongAnswers = 0;
+    
+    // Show flag elements if they were hidden
+    if (!document.querySelector(".flag-img")) {
+        location.reload();
+        return;
+    }
+    
+    // Reset score display
+    score.innerHTML = "0";
+    
+    // Restart the questions
+    getQuestions();
+});
 
 function getQuestions() {
     let myRequest = new XMLHttpRequest();
@@ -19,7 +42,7 @@ function getQuestions() {
         if (this.readyState === 4 && this.status === 200) {
             let questions = JSON.parse(this.responseText);
             //Number Of Question Each New Game
-            let qCount = 10;
+            let qCount = 5;
             questionNum(qCount);
             //Random Question Each New Game
             questions = questions
@@ -39,7 +62,7 @@ function getQuestions() {
                     //Check The Answer after 500ms
                     setTimeout(() => {
                         checkAnswer(rightAnswer, qCount);
-                    }, 500);
+                    }, 150);
 
                     setTimeout(() => {
                         //Remove Previous Image Source
