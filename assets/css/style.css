@@ -265,7 +265,10 @@ h3 {
 @media (min-width: 991px) {
     /* keep layout tweaks for larger screens here if needed */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 80f1a26a7c8adde27d6d230302f0ea3052bdca0d
 }
 
 /* Subtle zoom animation for the flag image */
@@ -281,7 +284,10 @@ h3 {
     100% {
         transform: scale(1, 1);
     }
+<<<<<<< HEAD
 >>>>>>> main
+=======
+>>>>>>> 80f1a26a7c8adde27d6d230302f0ea3052bdca0d
 }
 
 /* Subtle zoom animation for the flag image */
