@@ -264,6 +264,24 @@ h3 {
 
 @media (min-width: 991px) {
     /* keep layout tweaks for larger screens here if needed */
+<<<<<<< HEAD
+=======
+}
+
+/* Subtle zoom animation for the flag image */
+@keyframes zoom-in-zoom-out {
+    0% {
+        transform: scale(1, 1);
+    }
+
+    50% {
+        transform: scale(1.1, 1.1);
+    }
+
+    100% {
+        transform: scale(1, 1);
+    }
+>>>>>>> main
 }
 
 /* Subtle zoom animation for the flag image */
