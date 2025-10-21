@@ -39,7 +39,7 @@ function getQuestions() {
                     //Check The Answer after 500ms
                     setTimeout(() => {
                         checkAnswer(rightAnswer, qCount);
-                    }, 500);
+                    }, 150);
 
                     setTimeout(() => {
                         //Remove Previous Image Source
