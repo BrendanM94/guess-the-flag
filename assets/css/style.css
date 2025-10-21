@@ -1,3 +1,4 @@
+/* Typography import: Play font for headings/body */
 @import url("https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap");
 
 /* Global Styles */
@@ -8,10 +9,14 @@ html {
     line-height: 1.6;
     scroll-behavior: smooth;
 }
-/* CSS Variables */
+/* Page background image (world map) */
 body {
     background-image: url("../images/map.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 160% auto; /* zoom in to image to show no white border */
 }
+
 ul {
     list-style: none;
     margin: 0;
@@ -23,6 +28,7 @@ a {
     color: inherit;
 }
 
+/* Main title */
 h1 {
     text-align: center;
     font-size: 3.2rem;
@@ -30,12 +36,14 @@ h1 {
     margin-bottom: 2rem 0;
 }
 
+/* Section headings */
 h3 {
     font-size: 2.4rem;
     text-transform: capitalize;
     margin-bottom: 1.5rem 0;
 }
 
+/* Card wrapper around flag/image/options */
 .flags {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -44,6 +52,7 @@ h3 {
     margin-bottom: 2rem;
     margin-top: 1rem;
 }
+/* Page content container with responsive max widths (see media queries) */
 .container {
     padding-left: 2rem;
     padding-right: 2rem;
@@ -51,27 +60,31 @@ h3 {
     margin-right: auto;
 }
 
+/* Score/utility box styling */
 .box {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     padding: 2rem;
-    background-color: #fff;
+    background-color: rgb(255, 255, 255, 0.3);
     margin-bottom: 2rem;
 }
 
+/* Question counter label */
 .box .count {
     font-size: 1.4rem;
     margin-bottom: 1rem;
-    color: fuchsia;
+    color: rgb(0, 0, 0);
     text-transform: uppercase;
 }
 
+/* Flags section layout */
 .flags {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     padding: 1rem 0;
+    background-color: rgb(255, 255, 255, 0.3);
 }
 
 .flags .flag-img img {
@@ -99,21 +112,30 @@ h3 {
     font-size: 2.5rem;
     text-transform: capitalize;
     margin-bottom: 1.5rem;
-    background-color: var(--white);
+    background-color: rgb(255, 255, 255);
     padding: 1rem;
     border-radius: 0.5rem;
     width: 240px;
-    color: var(--violet);
+    color: rgb(139, 92, 246);
     cursor: pointer;
     box-shadow: 0 0.5rem 0.5rem 0.5rem rgba(0 0 0 / 0.3);
     transition: all 0.1s ease-in-out;
 }
 
+/* Hover effect for options (disabled when selected/correct/incorrect) */
+.flags .flag-options ul li:not(.success):not(.wrong):not(.active):hover {
+    background-color: rgb(139, 92, 246);
+    color: rgb(255, 255, 255);
+    transform: translateY(-2px);
+    box-shadow: 0 0.7rem 1rem rgba(0 0 0 / 0.35);
+}
+
+/* New Game button styling */
 #newGame {
     border: none;
-    background-color: var(--violet);
+    background-color: rgb(139, 92, 246);
     padding: 1.5rem;
-    color: var(--white);
+    color: rgb(255, 255, 255);
     cursor: pointer;
     font-size: 1.8rem;
     font-weight: bold;
@@ -126,70 +148,66 @@ h3 {
     border-radius: 0.5rem;
 }
 
+/* Score summary colors */
 .score .right,
 .score .incorrect {
-    color: var(--violet);
+    color: rgb(139, 92, 246);
 }
 
+/* Selected option state */
 .flags .flag-options ul li.active {
-    background-color: var(--violet);
-    color: var(--white);
+    background-color: rgb(139, 92, 246);
+    color: rgb(255, 255, 255);
 }
 
+/* Correct answer state */
 .flags .flag-options ul li.success {
     background-color: #1eb53a;
 }
 
+/* Wrong answer state */
 .flags .flag-options ul li.wrong {
     background-color: red;
 }
 
 /* Media Queries */
 
+/* Small devices ≥576px: set container width */
 @media (min-width: 576px) {
     .container {
         width: 540px;
     }
 }
 
+/* Tablets ≥768px: set container width */
 @media (min-width: 768px) {
     .container {
         width: 720px;
     }
 }
 
+/* Desktops ≥992px: set container width */
 @media (min-width: 992px) {
     .container {
         width: 960px;
     }
 }
 
+/* Large desktops ≥1200px: set container width */
 @media (min-width: 1200px) {
     .container {
         width: 1140px;
     }
 }
 
+/* Extra large desktops ≥1400px: set container width */
 @media (min-width: 1400px) {
     .container {
         width: 1320px;
     }
 }
 
-@keyframes zoom-in-zoom-out {
-    0% {
-        transform: scale(1, 1);
-    }
-
-    50% {
-        transform: scale(1.1, 1.1);
-    }
-
-    100% {
-        transform: scale(1, 1);
-    }
-}
-
+/* Small phones ≥375px: scale type and content widths */
 @media (min-width: 375px) {
     h1,
     h3,
@@ -206,7 +224,6 @@ h3 {
         width: 100%;
     }
 }
-
 @media (min-width: 768px) {
     h1 {
         font-size: 6rem;
@@ -214,8 +231,20 @@ h3 {
 }
 
 @media (min-width: 991px) {
-    .flags .flag-options ul li:hover {
-        background-color: var(--violet);
-        color: var(--white);
+    /* keep layout tweaks for larger screens here if needed */
+}
+
+/* Subtle zoom animation for the flag image */
+@keyframes zoom-in-zoom-out {
+    0% {
+        transform: scale(1, 1);
+    }
+
+    50% {
+        transform: scale(1.1, 1.1);
+    }
+
+    100% {
+        transform: scale(1, 1);
     }
 }
