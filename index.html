@@ -12,7 +12,7 @@
 <body>
     <main>
         <div class="container">
-            <h1><u>🌍flags of the world🌍</u></h1>
+            <h1 onclick="location.reload()"><u>🌍flags of the world🌍</u></h1>
             <div class="box">
                 <h3><u>Score:</u> <span></span></h3>
                 <div class="count">question: <span></span></div>
@@ -29,11 +29,11 @@
                     </ul>
                 </div>
                 <!-- Added restart button -->
-                <button id="restartGame" class="restart-btn">Restart Game</button>
+                <button id="restartGame" class="restart-btn" type="button">Restart Game</button>
                 <div class="score">
                     <h3 class="right">Your Right Answers: <span></span></h3>
                     <h3 class="incorrect">Your Incorrect Answers: <span></span></h3>
-                    <button id="newGame">New Game</button>
+                    <button id="newGame" type="button" hidden></button>
                 </div>
             </div>
         </div>
