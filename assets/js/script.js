@@ -1,3 +1,5 @@
+// 🎮 Flag Quiz + Leaderboard + Countdown Timer (20s per question)
+
 let countSpan = document.querySelector(".count span");
 let flagImgDiv = document.querySelector(".flag-img");
 let flagImg = document.querySelector(".flag-img img");
@@ -8,177 +10,204 @@ let scoreDiv = document.querySelector(".score");
 let correctAns = document.querySelector(".score .right span");
 let incorrectAns = document.querySelector(".score .incorrect span");
 let btnNewGame = document.querySelector("#newGame");
-/* Added restart button selector */
 let btnRestart = document.querySelector("#restartGame");
+
+// Leaderboard elements
+let nameModal = document.getElementById("nameModal");
+let playerNameInput = document.getElementById("playerName");
+let saveScoreBtn = document.getElementById("saveScoreBtn");
+
+// Timer display (add this <div class="timer"><span></span></div> in your HTML near the question)
+let timerDisplay = document.querySelector(".timer span");
 
 let currentIndex = 0;
 let rightAnswers = 0;
 let wrongAnswers = 0;
+let totalSeconds = 0;
+let questionTimer; // per-question timer
+let overallTimer;  // total game timer
+let timeLeft = 20; // seconds per question
 
-// Add this with your other event listeners to restart the game
+// Restart button
 btnRestart.addEventListener("click", () => {
-    window.location.reload();
+  restartGame();
 });
 
+// Start total timer
+function startTotalTimer() {
+  totalSeconds = 0;
+  overallTimer = setInterval(() => {
+    totalSeconds++;
+  }, 1000);
+}
+
+// Start per-question countdown
+function startQuestionTimer(questions, qCount) {
+  clearInterval(questionTimer);
+  timeLeft = 20;
+  timerDisplay.textContent = timeLeft;
+
+  questionTimer = setInterval(() => {
+    timeLeft--;
+    timerDisplay.textContent = timeLeft;
+
+    // Time ran out
+    if (timeLeft <= 0) {
+      clearInterval(questionTimer);
+      wrongAnswers++;
+      currentIndex++;
+      setTimeout(() => {
+        moveToNextQuestion(questions, qCount);
+      }, 300);
+    }
+  }, 1000);
+}
+
+// Fetch questions
 function getQuestions() {
-    let myRequest = new XMLHttpRequest();
-    myRequest.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            let questions = JSON.parse(this.responseText);
-            //Number Of Question Each New Game
-            let qCount = 5;
-            questionNum(qCount);
-            //Random Question Each New Game
-            questions = questions
-                .sort(() => Math.random() - Math.random())
-                .slice(0, qCount);
+  let myRequest = new XMLHttpRequest();
+  myRequest.onreadystatechange = function () {
+    if (this.readyState === 4 && this.status === 200) {
+      let questions = JSON.parse(this.responseText);
+      let qCount = 5;
+      questionNum(qCount);
+      questions = questions.sort(() => Math.random() - Math.random()).slice(0, qCount);
+      addQuestionData(questions[currentIndex], qCount);
+      startTotalTimer();
+      startQuestionTimer(questions, qCount);
 
-            //Add Questions Data
-            addQuestionData(questions[currentIndex], qCount);
+      flagLis.forEach((li) => {
+        li.addEventListener("click", () => {
+          clearInterval(questionTimer);
+          let rightAnswer = questions[currentIndex].right_answer;
+          li.classList.add("active");
+          currentIndex++;
 
-            flagLis.forEach((li) => {
-                li.addEventListener("click", () => {
-                    let rightAnswer = questions[currentIndex].right_answer;
-                    li.classList.add("active");
-                    //Increase Index
-                    currentIndex++;
+          setTimeout(() => {
+            checkAnswer(rightAnswer, qCount);
+          }, 150);
 
-                    //Check The Answer after 500ms
-                    setTimeout(() => {
-                        checkAnswer(rightAnswer, qCount);
-                    }, 150);
-
-                    setTimeout(() => {
-                        //Remove Previous Image Source
-                        flagImg.src = "";
-                        //Remove All Classes (active,success,wrong)
-                        li.classList.remove("active");
-                        li.classList.remove("success");
-                        li.classList.remove("wrong");
-
-                        //Add Questions Data To Show The Next Question
-                        addQuestionData(questions[currentIndex], qCount);
-                    }, 1000);
-
-                    //Show Results
-                    setTimeout(() => {
-                        showResults(qCount);
-                    }, 1002);
-                });
-            });
-        }
-    };
-    myRequest.open("GET", "assets/js/flag_questions.json", true);
-    myRequest.send();
+          setTimeout(() => {
+            li.classList.remove("active", "success", "wrong");
+            moveToNextQuestion(questions, qCount);
+          }, 1000);
+        });
+      });
+    }
+  };
+  myRequest.open("GET", "assets/js/flag_questions.json", true);
+  myRequest.send();
 }
 
 getQuestions();
 
 function questionNum(num) {
-    countSpan.innerHTML = num;
+  countSpan.innerHTML = num;
 }
 
-function addQuestionData(obj, count) {
-    if (currentIndex < count) {
-        //Update question counter
-        countSpan.innerHTML = `${currentIndex + 1} / ${count}`;
-
-        //Add flag image
-        flagImg.src = `assets/images/${obj.img}`;
-
-        //Add options
-        flagLis.forEach((li, index) => {
-            li.innerHTML = obj.options[index];
-            li.classList.remove("success", "wrong");
-        });
-
-        //Update score
-        score.innerHTML = rightAnswers;
-    }
-}
-
-function checkAnswer(rAnswer, count) {
-    let choosenAnswer;
-
-    flagLis.forEach((li) => {
-        if (li.classList.contains("active")) {
-            choosenAnswer = li.innerHTML.toLowerCase();
-
-            if (rAnswer.toLowerCase() === choosenAnswer) {
-                li.classList.add("success");
-                rightAnswers++;
-            } else {
-                li.classList.add("wrong");
-                wrongAnswers++;
-            }
-        }
-    });
-}
-
-function showResults(count) {
-    if (currentIndex === count) {
-        flagImgDiv.remove();
-        flagOptions.remove();
-        scoreDiv.style.display = "block";
-        correctAns.innerHTML = rightAnswers;
-        incorrectAns.innerHTML = wrongAnswers;
-    }
-}
-
-btnNewGame.addEventListener("click", () => {
-    window.location.reload();
-});
-
-
-// --- Adding timer 10 seconder for question ---
-
-let timer;          // interval reference
-let timeLeft = 20;  // seconds per question
-let timeSpan = document.querySelector("#timeLeft");
-
-// Start or restart timer
-function startTimer(duration, onTimeout) {
-  clearInterval(timer); // reset previous timer
-  timeLeft = duration;
-  timeSpan.textContent = timeLeft;
-
-  timer = setInterval(() => {
-    timeLeft--;
-    timeSpan.textContent = timeLeft;
-
-    if (timeLeft <= 0) {
-      clearInterval(timer);
-      onTimeout(); // run when timer hits zero
-    }
-  }, 1000);
-}
-
-// Stop timer manually when player answers
-function stopTimer() {
-  clearInterval(timer);
-}
 function addQuestionData(obj, count) {
   if (currentIndex < count) {
-    // Update question counter
     countSpan.innerHTML = `${currentIndex + 1} / ${count}`;
-
-    // Add flag image
     flagImg.src = `assets/images/${obj.img}`;
-
-    // Add options
     flagLis.forEach((li, index) => {
       li.innerHTML = obj.options[index];
-      li.classList.remove("success", "wrong", "active");
+      li.classList.remove("success", "wrong");
     });
-
-    // Restart timer for this question
-    startTimer(20, () => {
-      // Time ran out → treat as wrong answer and move to next
-      wrongAnswers++;
-      currentIndex++;
-      addQuestionData(obj, count);
-      showResults(count);
-    });
+    score.innerHTML = rightAnswers;
   }
 }
 
+// Move to next question or end
+function moveToNextQuestion(questions, qCount) {
+  if (currentIndex < qCount) {
+    addQuestionData(questions[currentIndex], qCount);
+    startQuestionTimer(questions, qCount);
+  } else {
+    showResults(qCount);
+  }
+}
+
+function checkAnswer(rAnswer, count) {
+  flagLis.forEach((li) => {
+    if (li.classList.contains("active")) {
+      let choosenAnswer = li.innerHTML.toLowerCase();
+      if (rAnswer.toLowerCase() === choosenAnswer) {
+        li.classList.add("success");
+        rightAnswers++;
+      } else {
+        li.classList.add("wrong");
+        wrongAnswers++;
+      }
+    }
+  });
+}
+
+// 🧮 Leaderboard Functions
+function showLeaderboard() {
+  const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+  const tbody = document.querySelector("#leaderboardTable tbody");
+  tbody.innerHTML = "";
+
+  leaderboard
+    .sort((a, b) => b.score - a.score || a.time - b.time)
+    .slice(0, 10)
+    .forEach((player, index) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${player.name}</td>
+        <td>${player.score}</td>
+        <td>${player.wrong}</td>
+        <td>${player.time}</td>
+        <td>${player.date}</td>
+      `;
+      tbody.appendChild(row);
+    });
+}
+
+function savePlayerData(name, score, wrong, time) {
+  const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+  leaderboard.push({
+    name: name || "Player",
+    score,
+    wrong,
+    time,
+    date: new Date().toLocaleString(),
+  });
+  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+  showLeaderboard();
+}
+
+function showResults(count) {
+  if (currentIndex === count) {
+    clearInterval(questionTimer);
+    clearInterval(overallTimer);
+    flagImgDiv.remove();
+    flagOptions.remove();
+    scoreDiv.style.display = "block";
+    correctAns.innerHTML = rightAnswers;
+    incorrectAns.innerHTML = wrongAnswers;
+
+    // Ask for player name
+    nameModal.style.display = "block";
+    saveScoreBtn.onclick = () => {
+      const name = playerNameInput.value.trim() || "Player";
+      savePlayerData(name, rightAnswers, wrongAnswers, totalSeconds);
+      nameModal.style.display = "none";
+    };
+  }
+}
+
+function restartGame() {
+  currentIndex = 0;
+  rightAnswers = 0;
+  wrongAnswers = 0;
+  totalSeconds = 0;
+  clearInterval(questionTimer);
+  clearInterval(overallTimer);
+  scoreDiv.style.display = "none";
+  window.location.reload();
+}
+
+btnNewGame.addEventListener("click", restartGame);
+showLeaderboard();
