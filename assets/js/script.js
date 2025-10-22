@@ -43,7 +43,7 @@ function getQuestions() {
                     //Increase Index
                     currentIndex++;
 
-                    //Check The Answer after 500ms
+                    //Check The Answer after 150ms
                     setTimeout(() => {
                         checkAnswer(rightAnswer, qCount);
                     }, 150);
