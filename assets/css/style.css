@@ -34,6 +34,14 @@ h1 {
     font-size: 3.2rem;
     text-transform: capitalize;
     margin-bottom: 2rem 0;
+    cursor: pointer;
+    transition: ease-in-out 0.5s;
+}
+
+/* added text tranform to h1 */
+h1:hover {
+    font-size:3.4rem;
+
 }
 
 /* Section headings */
@@ -170,6 +178,8 @@ h3 {
     background-color: red;
 }
 
+/* Restart Button Styling */
+
 .restart-btn {
     margin: 20px auto;
     padding: 10px 20px;
@@ -184,13 +194,12 @@ h3 {
     
     border-radius: 0.5rem;
     width: 240px;
-    cursor: pointer;
     box-shadow: 0 0.5rem 0.5rem 0.5rem rgba(0 0 0 / 0.3);
     transition: all 0.1s ease-in-out;
     display: flex;
     align-items: center;
     flex-direction: column;
-    /*width: %;*/
+    width:85% ;
 }
 
 .restart-btn:hover {
@@ -264,30 +273,6 @@ h3 {
 
 @media (min-width: 991px) {
     /* keep layout tweaks for larger screens here if needed */
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 80f1a26a7c8adde27d6d230302f0ea3052bdca0d
-}
-
-/* Subtle zoom animation for the flag image */
-@keyframes zoom-in-zoom-out {
-    0% {
-        transform: scale(1, 1);
-    }
-
-    50% {
-        transform: scale(1.1, 1.1);
-    }
-
-    100% {
-        transform: scale(1, 1);
-    }
-<<<<<<< HEAD
->>>>>>> main
-=======
->>>>>>> 80f1a26a7c8adde27d6d230302f0ea3052bdca0d
 }
 
 /* Subtle zoom animation for the flag image */
