@@ -38,11 +38,8 @@ h1 {
     transition: ease-in-out 0.5s;
 }
 
-/* added text tranform to h1 */
-h1:hover {
-    font-size: 5rem;
 
-}
+
 
 /* Section headings */
 h3 {

@@ -128,3 +128,57 @@ function showResults(count) {
 btnNewGame.addEventListener("click", () => {
     window.location.reload();
 });
+
+
+// --- Adding timer 10 seconder for question ---
+
+let timer;          // interval reference
+let timeLeft = 20;  // seconds per question
+let timeSpan = document.querySelector("#timeLeft");
+
+// Start or restart timer
+function startTimer(duration, onTimeout) {
+  clearInterval(timer); // reset previous timer
+  timeLeft = duration;
+  timeSpan.textContent = timeLeft;
+
+  timer = setInterval(() => {
+    timeLeft--;
+    timeSpan.textContent = timeLeft;
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      onTimeout(); // run when timer hits zero
+    }
+  }, 1000);
+}
+
+// Stop timer manually when player answers
+function stopTimer() {
+  clearInterval(timer);
+}
+function addQuestionData(obj, count) {
+  if (currentIndex < count) {
+    // Update question counter
+    countSpan.innerHTML = `${currentIndex + 1} / ${count}`;
+
+    // Add flag image
+    flagImg.src = `assets/images/${obj.img}`;
+
+    // Add options
+    flagLis.forEach((li, index) => {
+      li.innerHTML = obj.options[index];
+      li.classList.remove("success", "wrong", "active");
+    });
+
+    // Restart timer for this question
+    startTimer(20, () => {
+      // Time ran out → treat as wrong answer and move to next
+      wrongAnswers++;
+      currentIndex++;
+      addQuestionData(obj, count);
+      showResults(count);
+    });
+  }
+}
+
