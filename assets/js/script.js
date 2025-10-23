@@ -11,6 +11,12 @@ let btnNewGame = document.querySelector("#newGame");
 /* Added restart button selector */
 let btnRestart = document.querySelector("#restartGame");
 
+// Timer variables
+let timerInterval;
+let timePerQuestion = 10; // seconds per question
+let timerValue = document.getElementById("timerValue");
+let questions = [];
+
 let currentIndex = 0;
 let rightAnswers = 0;
 let wrongAnswers = 0;
@@ -24,8 +30,8 @@ function getQuestions() {
     let myRequest = new XMLHttpRequest();
     myRequest.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
-            let questions = JSON.parse(this.responseText);
-            //Number Of Question Each New Game
+            questions = JSON.parse(this.responseText);
+            //Number Of Question Each Negit w Game
             let qCount = 5;
             questionNum(qCount);
             //Random Question Each New Game
@@ -38,6 +44,7 @@ function getQuestions() {
 
             flagLis.forEach((li) => {
                 li.addEventListener("click", () => {
+                    clearInterval(timerInterval);
                     let rightAnswer = questions[currentIndex].right_answer;
                     li.classList.add("active");
                     //Increase Index
@@ -94,7 +101,31 @@ function addQuestionData(obj, count) {
 
         //Update score
         score.innerHTML = rightAnswers;
+
+        // Start timer for this question
+        startTimer(count);
     }
+}
+
+function startTimer(qCount) {
+    let timeLeft = timePerQuestion;
+    timerValue.textContent = timeLeft;
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        timerValue.textContent = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            // Mark as incorrect and go to next question or results
+            wrongAnswers++;
+            currentIndex++;
+            if (currentIndex < qCount) {
+                addQuestionData(questions[currentIndex], qCount);
+            } else {
+                showResults(qCount);
+            }
+        }
+    }, 1000);
 }
 
 function checkAnswer(rAnswer, count) {
@@ -116,6 +147,7 @@ function checkAnswer(rAnswer, count) {
 }
 
 function showResults(count) {
+    clearInterval(timerInterval);
     if (currentIndex === count) {
         flagImgDiv.remove();
         flagOptions.remove();
