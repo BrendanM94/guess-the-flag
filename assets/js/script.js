@@ -21,7 +21,7 @@ let saveScoreBtn = document.getElementById("saveScoreBtn");
 
 
 // Timer display (add this <div class="timer"><span></span></div> in your HTML near the question)
-let timerDisplay = document.querySelector(".timer span");
+let timerDisplay = document.querySelector(".timer span") || document.getElementById("timeLeft");
 
 
 let currentIndex = 0;
@@ -42,6 +42,7 @@ btnRestart.addEventListener("click", () => {
 // Start total timer
 function startTotalTimer() {
   totalSeconds = 0;
+  overallTimer = clearInterval(overallTimer);
   overallTimer = setInterval(() => {
     totalSeconds++;
   }, 1000);
@@ -52,13 +53,11 @@ function startTotalTimer() {
 function startQuestionTimer(questions, qCount) {
   clearInterval(questionTimer);
   timeLeft = 20;
-  timerDisplay.textContent = timeLeft;
-
+  if (timerDisplay) timerDisplay.textContent = timeLeft;
 
   questionTimer = setInterval(() => {
     timeLeft--;
-    timerDisplay.textContent = timeLeft;
-
+    if (timerDisplay) timerDisplay.textContent = timeLeft;
 
     // Time ran out
     if (timeLeft <= 0) {
@@ -81,27 +80,41 @@ function getQuestions() {
       let questions = JSON.parse(this.responseText);
       let qCount = 5;
       questionNum(qCount);
+
+      // Randomize and pick qCount questions
       questions = questions.sort(() => Math.random() - Math.random()).slice(0, qCount);
+
+      // Show first question
       addQuestionData(questions[currentIndex], qCount);
+
+      // Start timers
       startTotalTimer();
       startQuestionTimer(questions, qCount);
 
-
+      // Attach click handlers once
       flagLis.forEach((li) => {
         li.addEventListener("click", () => {
+          // Prevent clicks when game finished
+          if (currentIndex >= qCount) return;
+
           clearInterval(questionTimer);
           let rightAnswer = questions[currentIndex].right_answer;
           li.classList.add("active");
+
+          // Increase index so next question will be used when moving on
           currentIndex++;
 
-
+          // Check answer after a short delay for UX
           setTimeout(() => {
             checkAnswer(rightAnswer, qCount);
           }, 150);
 
-
+          // Prepare next question / end after showing result
           setTimeout(() => {
+            // Remove active class and status classes from this li
             li.classList.remove("active", "success", "wrong");
+
+            // Move to next question or show results
             moveToNextQuestion(questions, qCount);
           }, 1000);
         });
@@ -181,6 +194,8 @@ function getQuestions() {
 getQuestions();
 
 
+
+
 function questionNum(num) {
   countSpan.innerHTML = num;
 }
@@ -189,7 +204,9 @@ function questionNum(num) {
 function addQuestionData(obj, count) {
   if (currentIndex < count) {
     countSpan.innerHTML = `${currentIndex + 1} / ${count}`;
+    // set image src (relative to index.html)
     flagImg.src = `assets/images/${obj.img}`;
+    flagImg.alt = obj.options ? obj.options[0] : "flag";
     flagLis.forEach((li, index) => {
       li.innerHTML = obj.options[index];
       li.classList.remove("success", "wrong");
