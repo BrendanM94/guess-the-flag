@@ -70,6 +70,22 @@ function getQuestions() {
     };
     myRequest.open("GET", "assets/js/flag_questions.json", true);
     myRequest.send();
+
+    // Helpful debug: log network/XHR errors so DevTools shows why data failed to load
+    myRequest.addEventListener("error", () => {
+        console.error(
+            "Failed to load flag_questions.json (network error). Are you serving the site via HTTP?"
+        );
+    });
+    myRequest.addEventListener("loadend", () => {
+        if (myRequest.readyState === 4 && myRequest.status !== 200) {
+            console.error(
+                "flag_questions.json returned status",
+                myRequest.status,
+                myRequest.statusText
+            );
+        }
+    });
 }
 
 getQuestions();
