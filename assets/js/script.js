@@ -1,4 +1,5 @@
-// Single-file quiz + leaderboard implementation (fixed)
+// Single-file quiz + leaderboard implementation
+// (clean, no merge markers)
 
 (function () {
   const appError = document.getElementById("appError");
@@ -13,22 +14,22 @@
   const btnNewGame = document.querySelector("#newGame");
   const timerEl = document.getElementById("timeLeft") || document.querySelector(".timer span");
 
-  let questions = [];
-  const qCount = 5;
-  let currentIndex = 0;
-  let rightAnswers = 0;
-  let wrongAnswers = 0;
-  let questionTimer = null;
-  let timeLeft = 10; // match HTML: starts at 10 seconds
-  let startTime = null;
+    let questions = [];
+    let qCount = 5;
+    let currentIndex = 0;
+    let rightAnswers = 0;
+    let wrongAnswers = 0;
+    let questionTimer = null;
+    let timeLeft = 15.0;
+    let startTime = null;
 
-  function showError(msg) {
-    console.error(msg);
-    if (appError) {
-      appError.style.display = "block";
-      appError.textContent = msg;
+    function showError(msg) {
+        console.error(msg);
+        if (appError) {
+            appError.style.display = "block";
+            appError.textContent = msg;
+        }
     }
-  }
 
   function fetchQuestions() {
     return fetch("assets/js/flag_questions.json").then((r) => {
@@ -42,19 +43,19 @@
     return a.sort(() => Math.random() - 0.5);
   }
 
-  function startQuestionTimer(onExpire) {
-    stopQuestionTimer();
-    timeLeft = 10;
-    if (timerEl) timerEl.textContent = String(timeLeft);
-    questionTimer = setInterval(() => {
-      timeLeft = Math.max(0, timeLeft - 1);
-      if (timerEl) timerEl.textContent = String(timeLeft);
-      if (timeLeft === 0) {
+    function startQuestionTimer(onExpire) {
         stopQuestionTimer();
-        if (typeof onExpire === "function") onExpire();
-      }
-    }, 1000);
-  }
+        timeLeft = 15.0;
+        if (timerEl) timerEl.textContent = timeLeft.toFixed(1);
+        questionTimer = setInterval(() => {
+            timeLeft = Math.max(0, +(timeLeft - 0.1).toFixed(1));
+            if (timerEl) timerEl.textContent = timeLeft.toFixed(1);
+            if (timeLeft <= 0) {
+                stopQuestionTimer();
+                if (typeof onExpire === "function") onExpire();
+            }
+        }, 100);
+    }
 
   function stopQuestionTimer() {
     if (questionTimer) {
@@ -63,75 +64,63 @@
     }
   }
 
-  function renderQuestion() {
-    if (!questions || questions.length === 0) return;
-    if (currentIndex >= qCount) {
-      showResults();
-      return;
+    function renderQuestion() {
+        if (!questions || questions.length === 0) return;
+        if (currentIndex >= qCount) {
+            showResults();
+            return;
+        }
+        const q = questions[currentIndex];
+        if (countSpan)
+            countSpan.textContent = `${currentIndex + 1} / ${qCount}`;
+        if (flagImg) {
+            flagImg.src = `assets/images/${q.img}`;
+            flagImg.alt = q.options && q.options[0] ? q.options[0] : "flag";
+        }
+        optionLis.forEach((li, i) => {
+            li.textContent = q.options[i] || "";
+            li.classList.remove("active", "success", "wrong");
+            li.style.pointerEvents = "auto";
+        });
+        if (scoreSpan) scoreSpan.textContent = String(rightAnswers);
+
+        startQuestionTimer(() => {
+            wrongAnswers++;
+            if (scoreSpan) scoreSpan.textContent = String(rightAnswers);
+            optionLis.forEach((li) => li.classList.add("wrong"));
+            setTimeout(() => {
+                currentIndex++;
+                renderQuestion();
+            }, 700);
+        });
     }
 
-    const q = questions[currentIndex];
-
-    if (countSpan) countSpan.textContent = `${currentIndex + 1} / ${qCount}`;
-
-    if (flagImg) {
-      flagImg.src = `assets/images/${q.img}`;
-      // Use the actual correct country as alt text (accessibility)
-      flagImg.alt = q.right_answer || "flag";
+    function handleChoiceClick(e) {
+        const li = e.currentTarget;
+        if (li.classList.contains("disabled")) return;
+        stopQuestionTimer();
+        const q = questions[currentIndex];
+        const chosen = li.textContent.trim().toLowerCase();
+        const right = (q.right_answer || "").toLowerCase();
+        li.classList.add("active");
+        optionLis.forEach((o) => (o.style.pointerEvents = "none"));
+        if (chosen === right) {
+            li.classList.add("success");
+            rightAnswers++;
+        } else {
+            li.classList.add("wrong");
+            wrongAnswers++;
+            const correctLi = optionLis.find(
+                (x) => x.textContent.trim().toLowerCase() === right
+            );
+            if (correctLi) correctLi.classList.add("success");
+        }
+        if (scoreSpan) scoreSpan.textContent = String(rightAnswers);
+        setTimeout(() => {
+            currentIndex++;
+            renderQuestion();
+        }, 800);
     }
-
-    optionLis.forEach((li, i) => {
-      li.textContent = q.options[i] || "";
-      li.classList.remove("active", "success", "wrong");
-      li.style.pointerEvents = "auto";
-    });
-
-    if (scoreSpan) scoreSpan.textContent = String(rightAnswers);
-
-    startQuestionTimer(() => {
-      // time ran out -> mark wrong
-      wrongAnswers++;
-      if (scoreSpan) scoreSpan.textContent = String(rightAnswers);
-      optionLis.forEach((li) => li.classList.add("wrong"));
-      setTimeout(() => {
-        currentIndex++;
-        renderQuestion();
-      }, 700);
-    });
-  }
-
-  function handleChoiceClick(e) {
-    const li = e.currentTarget;
-    if (li.classList.contains("disabled")) return;
-
-    stopQuestionTimer();
-
-    const q = questions[currentIndex];
-    const chosen = li.textContent.trim().toLowerCase();
-    const right = (q.right_answer || "").toLowerCase();
-
-    li.classList.add("active");
-    optionLis.forEach((o) => (o.style.pointerEvents = "none"));
-
-    if (chosen === right) {
-      li.classList.add("success");
-      rightAnswers++;
-    } else {
-      li.classList.add("wrong");
-      wrongAnswers++;
-      const correctLi = optionLis.find(
-        (x) => x.textContent.trim().toLowerCase() === right
-      );
-      if (correctLi) correctLi.classList.add("success");
-    }
-
-    if (scoreSpan) scoreSpan.textContent = String(rightAnswers);
-
-    setTimeout(() => {
-      currentIndex++;
-      renderQuestion();
-    }, 800);
-  }
 
   function attachHandlers() {
     optionLis.forEach((li) => {
@@ -224,31 +213,84 @@ function savePlayerData(name, score, wrong, time) {
 }
 
 function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => (
-    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
-  ));
+    return String(s).replace(
+        /[&<>"']/g,
+        (c) =>
+            ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+            }[c])
+    );
 }
 
-// ===== Save button wiring (once, with guard) =====
-function wireSaveOnce() {
-  const btn = document.getElementById("saveScoreBtn");
-  if (!btn || btn.dataset.bound === "1") return;
-
-  btn.addEventListener("click", () => {
-    // disable immediately to prevent double-clicks
-    btn.disabled = true;
-
-    const name = (document.getElementById("playerName") || { value: "" }).value.trim() || "Player";
-    const score = Number((document.querySelector(".score .right span") || { textContent: "0" }).textContent) || 0;
-    const wrong = Number((document.querySelector(".score .incorrect span") || { textContent: "0" }).textContent) || 0;
-    const time = Math.round((Date.now() - (window.__quizStartTime || Date.now())) / 1000) || 0;
-
-    savePlayerData(name, score, wrong, time);
-
-    const modal = document.getElementById("nameModal");
-    if (modal) modal.style.display = "none";
-  }, { once: true }); // <-- guarantees this handler fires only once per page lifecycle
-
-  // mark as bound to avoid accidental re-binding from any future init paths
-  btn.dataset.bound = "1";
-}
+// Save button wiring
+(function wireSave() {
+    const btn = document.getElementById("saveScoreBtn");
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+        const name =
+            (
+                document.getElementById("playerName") || { value: "" }
+            ).value.trim() || "Player";
+        const score =
+            Number(
+                (
+                    document.querySelector(".score .right span") || {
+                        textContent: "0",
+                    }
+                ).textContent
+            ) || 0;
+        const wrong =
+            Number(
+                (
+                    document.querySelector(".score .incorrect span") || {
+                        textContent: "0",
+                    }
+                ).textContent
+            ) || 0;
+        const time =
+            Math.round(
+                (Date.now() - (window.__quizStartTime || Date.now())) / 1000
+            ) || 0;
+        savePlayerData(name, score, wrong, time);
+        const modal = document.getElementById("nameModal");
+        if (modal) modal.style.display = "none";
+    });
+})();
+(function wireSave() {
+    const btn = document.getElementById("saveScoreBtn");
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+        const name =
+            (
+                document.getElementById("playerName") || { value: "" }
+            ).value.trim() || "Player";
+        // infer score and wrong from DOM if possible
+        const score =
+            Number(
+                (
+                    document.querySelector(".score .right span") || {
+                        textContent: "0",
+                    }
+                ).textContent
+            ) || 0;
+        const wrong =
+            Number(
+                (
+                    document.querySelector(".score .incorrect span") || {
+                        textContent: "0",
+                    }
+                ).textContent
+            ) || 0;
+        const time =
+            Math.round(
+                (Date.now() - (window.__quizStartTime || Date.now())) / 1000
+            ) || 0;
+        savePlayerData(name, score, wrong, time);
+        const modal = document.getElementById("nameModal");
+        if (modal) modal.style.display = "none";
+    });
+})();
