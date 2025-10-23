@@ -123,6 +123,71 @@ function getQuestions() {
   };
   myRequest.open("GET", "assets/js/flag_questions.json", true);
   myRequest.send();
+    let myRequest = new XMLHttpRequest();
+    myRequest.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            let questions = JSON.parse(this.responseText);
+            //Number Of Question Each New Game
+            let qCount = 5;
+            questionNum(qCount);
+            //Random Question Each New Game
+            questions = questions
+                .sort(() => Math.random() - Math.random())
+                .slice(0, qCount);
+
+            //Add Questions Data
+            addQuestionData(questions[currentIndex], qCount);
+
+            flagLis.forEach((li) => {
+                li.addEventListener("click", () => {
+                    let rightAnswer = questions[currentIndex].right_answer;
+                    li.classList.add("active");
+                    //Increase Index
+                    currentIndex++;
+
+                    //Check The Answer after 150ms
+                    setTimeout(() => {
+                        checkAnswer(rightAnswer, qCount);
+                    }, 150);
+
+                    setTimeout(() => {
+                        //Remove Previous Image Source
+                        flagImg.src = "";
+                        //Remove All Classes (active,success,wrong)
+                        li.classList.remove("active");
+                        li.classList.remove("success");
+                        li.classList.remove("wrong");
+
+                        //Add Questions Data To Show The Next Question
+                        addQuestionData(questions[currentIndex], qCount);
+                    }, 1000);
+
+                    //Show Results
+                    setTimeout(() => {
+                        showResults(qCount);
+                    }, 1002);
+                });
+            });
+        }
+    };
+    myRequest.open("GET", "assets/js/flag_questions.json", true);
+    myRequest.send();
+
+    // Helpful debug: log network/XHR errors so DevTools shows why data failed to load
+    myRequest.addEventListener("error", () => {
+        console.error(
+            "Failed to load flag_questions.json (network error). Are you serving the site via HTTP?"
+        );
+    });
+    myRequest.addEventListener("loadend", () => {
+        if (myRequest.readyState === 4 && myRequest.status !== 200) {
+            console.error(
+                "flag_questions.json returned status",
+                myRequest.status,
+                myRequest.statusText
+            );
+        }
+    });
 }
 
 
