@@ -13,6 +13,17 @@ let incorrectAns = document.querySelector(".score .incorrect span");
 let btnNewGame = document.querySelector("#newGame");
 let btnRestart = document.querySelector("#restartGame");
 
+
+// Leaderboard elements
+let nameModal = document.getElementById("nameModal");
+let playerNameInput = document.getElementById("playerName");
+let saveScoreBtn = document.getElementById("saveScoreBtn");
+
+
+// Timer display (add this <div class="timer"><span></span></div> in your HTML near the question)
+let timerDisplay = document.querySelector(".timer span") || document.getElementById("timeLeft");
+
+
 let currentIndex = 0;
 let rightAnswers = 0;
 let wrongAnswers = 0;
@@ -115,8 +126,8 @@ function getQuestions() {
     let myRequest = new XMLHttpRequest();
     myRequest.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
-            questions = JSON.parse(this.responseText);
-            //Number Of Question Each Negit w Game
+            let questions = JSON.parse(this.responseText);
+            //Number Of Question Each New Game
             let qCount = 5;
             questionNum(qCount);
             //Random Question Each New Game
@@ -129,7 +140,6 @@ function getQuestions() {
 
             flagLis.forEach((li) => {
                 li.addEventListener("click", () => {
-                    clearInterval(timerInterval);
                     let rightAnswer = questions[currentIndex].right_answer;
                     li.classList.add("active");
                     //Increase Index
@@ -192,22 +202,17 @@ function questionNum(num) {
 
 
 function addQuestionData(obj, count) {
-    if (currentIndex < count) {
-        //Update question counter
-        countSpan.innerHTML = `${currentIndex + 1} / ${count}`;
-
-        //Add flag image
-        flagImg.src = `assets/images/${obj.img}`;
-
-        //Add options
-        flagLis.forEach((li, index) => {
-            li.innerHTML = obj.options[index];
-            li.classList.remove("success", "wrong");
-        });
-
-        //Update score
-        score.innerHTML = rightAnswers;
-    }
+  if (currentIndex < count) {
+    countSpan.innerHTML = `${currentIndex + 1} / ${count}`;
+    // set image src (relative to index.html)
+    flagImg.src = `assets/images/${obj.img}`;
+    flagImg.alt = obj.options ? obj.options[0] : "flag";
+    flagLis.forEach((li, index) => {
+      li.innerHTML = obj.options[index];
+      li.classList.remove("success", "wrong");
+    });
+    score.innerHTML = rightAnswers;
+  }
 }
 
 
@@ -261,32 +266,56 @@ function showLeaderboard() {
       tbody.appendChild(row);
     });
 }
-
-
 function savePlayerData(name, score, wrong, time) {
-  const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-  leaderboard.push({
-    name: name || "Player",
-    score,
-    wrong,
-    time,
-    date: new Date().toLocaleString(),
-  });
-  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-  showLeaderboard();
+    const list = loadLeaderboard();
+    list.push({
+        name: name || "Player",
+        score,
+        wrong,
+        time: Number(time) || 0,
+        date: new Date().toLocaleString(),
+    });
+    saveLeaderboard(list);
+    renderLeaderboard();
 }
 
 
 function showResults(count) {
-    if (currentIndex === count) {
-        flagImgDiv.remove();
-        flagOptions.remove();
-        scoreDiv.style.display = "block";
-        correctAns.innerHTML = rightAnswers;
-        incorrectAns.innerHTML = wrongAnswers;
-    }
+  if (currentIndex === count) {
+    clearInterval(questionTimer);
+    clearInterval(overallTimer);
+    flagImgDiv.remove();
+    flagOptions.remove();
+    scoreDiv.style.display = "block";
+    correctAns.innerHTML = rightAnswers;
+    incorrectAns.innerHTML = wrongAnswers;
+
+
+    // Ask for player name
+    nameModal.style.display = "block";
+    saveScoreBtn.onclick = () => {
+      const name = playerNameInput.value.trim() || "Player";
+      savePlayerData(name, rightAnswers, wrongAnswers, totalSeconds);
+      nameModal.style.display = "none";
+    };
+  }
 }
 
-btnNewGame.addEventListener("click", () => {
-    window.location.reload();
-});
+
+function restartGame() {
+  currentIndex = 0;
+  rightAnswers = 0;
+  wrongAnswers = 0;
+  totalSeconds = 0;
+  clearInterval(questionTimer);
+  clearInterval(overallTimer);
+  scoreDiv.style.display = "none";
+  window.location.reload();
+}
+
+
+btnNewGame.addEventListener("click", restartGame);
+showLeaderboard();
+
+
+
