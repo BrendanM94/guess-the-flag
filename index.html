@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,6 +10,7 @@
     <title>Flag Quiz Game</title>
 </head>
 
+
 <body>
     <main>
         <div class="container">
@@ -16,8 +18,8 @@
             <div class="box">
                 <h3><u>Score:</u> <span></span></h3>
                 <div class="count">question: <span></span></div>
-                <div class="timer">Time left: <span id="timerValue"></span>s</div>
             </div>
+           
             <div class="flags">
                 <div class="flag-img">
                     <img src="">
@@ -36,10 +38,44 @@
                     <h3 class="incorrect">Your Incorrect Answers: <span></span></h3>
                     <button id="newGame" type="button" hidden></button>
                 </div>
+                <!-- Leaderboard Section -->
+<!-- Add this below your quiz container -->
+<div class="leaderboard">
+  <h2>🏆 Leaderboard</h2>
+  <table id="leaderboardTable">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>Score</th>
+        <th>Wrong</th>
+        <th>Time (s)</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+
+<!-- Modal for entering name -->
+<div id="nameModal" class="modal">
+  <div class="modal-content">
+    <h3>Enter Your Name</h3>
+    <input type="text" id="playerName" placeholder="Your name" />
+    <button id="saveScoreBtn">Save Score</button>
+  </div>
+</div>
+
+
+
+
             </div>
         </div>
     </main>
     <script src="assets/js/script.js"></script>
 </body>
 
+
 </html>
+

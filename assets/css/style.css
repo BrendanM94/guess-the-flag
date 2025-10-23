@@ -1,6 +1,7 @@
 /* Typography import: Play font for headings/body */
 @import url("https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap");
 
+
 /* Global Styles */
 html {
     font-family: "Play", sans-serif;
@@ -17,16 +18,19 @@ body {
     background-size: 160% auto; /* zoom in to image to show no white border */
 }
 
+
 ul {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
+
 a {
     text-decoration: none;
     color: inherit;
 }
+
 
 /* Main title */
 h1 {
@@ -38,10 +42,13 @@ h1 {
     transition: ease-in-out 0.5s;
 }
 
-/* added text tranform to h1 */
-h1:hover {
-    font-size: 5rem;
-}
+
+
+
+
+
+
+
 
 /* Section headings */
 h3 {
@@ -49,6 +56,7 @@ h3 {
     text-transform: capitalize;
     margin-bottom: 1.5rem 0;
 }
+
 
 /* Card wrapper around flag/image/options */
 .flags {
@@ -67,6 +75,7 @@ h3 {
     margin-right: auto;
 }
 
+
 /* Score/utility box styling */
 .box {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -76,13 +85,15 @@ h3 {
     margin-bottom: 2rem;
 }
 
+
 /* Question counter label */
-.box .count {
+.box .count , .box .timer {
     font-size: 1.4rem;
     margin-bottom: 1rem;
     color: rgb(0, 0, 0);
     text-transform: uppercase;
 }
+
 
 /* Flags section layout */
 .flags {
@@ -93,6 +104,7 @@ h3 {
     padding: 1rem 0;
     background-color: rgb(255, 255, 255, 0.3);
 }
+
 
 .flags .flag-img img {
     /* Make all quiz flag images render at a consistent size */
@@ -106,6 +118,7 @@ h3 {
     margin-bottom: 1.5rem;
 }
 
+
 /* Fixed display area for flags so all images appear same size
    Note: This intentionally targets only the quiz flag image wrapper, not the background map */
 .flags .flag-img {
@@ -114,9 +127,11 @@ h3 {
     max-width: 100%;
 }
 
+
 .flags .flag-options {
     margin-top: 2rem;
 }
+
 
 .flags .flag-options ul {
     display: flex;
@@ -124,6 +139,7 @@ h3 {
     flex-direction: column;
     width: 100%;
 }
+
 
 .flags .flag-options ul li {
     font-size: 2.5rem;
@@ -139,6 +155,7 @@ h3 {
     transition: all 0.1s ease-in-out;
 }
 
+
 /* Hover effect for options (disabled when selected/correct/incorrect) */
 .flags .flag-options ul li:not(.success):not(.wrong):not(.active):hover {
     background-color: rgb(139, 92, 246);
@@ -146,6 +163,7 @@ h3 {
     transform: translateY(-2px);
     box-shadow: 0 0.7rem 1rem rgba(0 0 0 / 0.35);
 }
+
 
 /* New Game button styling */
 #newGame {
@@ -159,11 +177,13 @@ h3 {
     letter-spacing: 0.1rem;
 }
 
+
 .score {
     display: none;
     padding: 2rem;
     border-radius: 0.5rem;
 }
+
 
 /* Score summary colors */
 .score .right,
@@ -171,23 +191,28 @@ h3 {
     color: rgb(139, 92, 246);
 }
 
+
 /* Selected option state */
 .flags .flag-options ul li.active {
     background-color: rgb(139, 92, 246);
     color: rgb(255, 255, 255);
 }
 
+
 /* Correct answer state */
 .flags .flag-options ul li.success {
     background-color: #1eb53a;
 }
+
 
 /* Wrong answer state */
 .flags .flag-options ul li.wrong {
     background-color: red;
 }
 
+
 /* Restart Button Styling */
+
 
 .restart-btn {
     margin: 20px auto;
@@ -201,6 +226,7 @@ h3 {
     font-size: 2.5rem;
     text-transform: capitalize;
 
+
     border-radius: 0.5rem;
     width: 240px;
     box-shadow: 0 0.5rem 0.5rem 0.5rem rgba(0 0 0 / 0.3);
@@ -211,6 +237,7 @@ h3 {
     max-width: 85%;
 }
 
+
 .restart-btn:hover {
     background-color: white;
     border-color: rgb(139, 92, 246);
@@ -218,7 +245,69 @@ h3 {
     color: rgb(139, 92, 246);
 }
 
+
+.leaderboard {
+  margin-top: 2rem;
+  background: #f0f0f0;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+
+.leaderboard table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+
+.leaderboard th, .leaderboard td {
+  border-bottom: 1px solid #ccc;
+  padding: 8px;
+}
+
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  margin: 15% auto;
+  text-align: center;
+}
+
+
+.modal input {
+  width: 80%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /* Media Queries */
+
 
 /* Small devices ≥576px: set container width */
 @media (min-width: 576px) {
@@ -227,12 +316,14 @@ h3 {
     }
 }
 
+
 /* Tablets ≥768px: set container width */
 @media (min-width: 768px) {
     .container {
         width: 720px;
     }
 }
+
 
 /* Desktops ≥992px: set container width */
 @media (min-width: 992px) {
@@ -241,6 +332,7 @@ h3 {
     }
 }
 
+
 /* Large desktops ≥1200px: set container width */
 @media (min-width: 1200px) {
     .container {
@@ -248,12 +340,14 @@ h3 {
     }
 }
 
+
 /* Extra large desktops ≥1400px: set container width */
 @media (min-width: 1400px) {
     .container {
         width: 1320px;
     }
 }
+
 
 /* Small phones ≥375px: scale type and content widths */
 @media (min-width: 375px) {
@@ -263,9 +357,11 @@ h3 {
         font-size: 3rem;
     }
 
+
     .flags .flag-options ul {
         width: 30rem;
     }
+
 
     .flags .flag-options ul li {
         width: 100%;
@@ -277,24 +373,11 @@ h3 {
     }
 }
 
+
 @media (min-width: 991px) {
     /* keep layout tweaks for larger screens here if needed */
 }
 
-/* Subtle zoom animation for the flag image */
-@keyframes zoom-in-zoom-out {
-    0% {
-        transform: scale(1, 1);
-    }
-
-    50% {
-        transform: scale(1.1, 1.1);
-    }
-
-    100% {
-        transform: scale(1, 1);
-    }
-}
 
 /* Subtle zoom animation for the flag image */
 @keyframes zoom-in-zoom-out {
@@ -302,11 +385,34 @@ h3 {
         transform: scale(1, 1);
     }
 
+
     50% {
         transform: scale(1.1, 1.1);
     }
+
 
     100% {
         transform: scale(1, 1);
     }
 }
+
+
+/* Subtle zoom animation for the flag image */
+@keyframes zoom-in-zoom-out {
+    0% {
+        transform: scale(1, 1);
+    }
+
+
+    50% {
+        transform: scale(1.1, 1.1);
+    }
+
+
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+
+
