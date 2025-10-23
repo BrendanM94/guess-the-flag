@@ -1,6 +1,4 @@
-// Single-file quiz + leaderboard implementation
-// (clean, no merge markers)
-
+// Single-file quiz + leaderboard implementation + sound + keyboard
 (function () {
     const appError = document.getElementById("appError");
     const countSpan = document.querySelector(".count span");
@@ -24,8 +22,21 @@
     let rightAnswers = 0;
     let wrongAnswers = 0;
     let questionTimer = null;
-    let timeLeft = 15.0;
+    let timeLeft = 20.0;
     let startTime = null;
+
+    // 🎵 Sound setup
+    const soundCorrect = new Audio("assets/sounds/correct-choice-43861.mp3");
+
+    const soundWrong = new Audio("assets/sounds/wrong-47985.mp3");
+    const soundPop = new Audio("assets/sounds/pop.mp3");
+    soundCorrect.volume = 0.6;
+    soundWrong.volume = 0.6;
+    soundPop.volume = 0.4;
+
+   
+
+    
 
     function showError(msg) {
         console.error(msg);
@@ -48,7 +59,7 @@
 
     function startQuestionTimer(onExpire) {
         stopQuestionTimer();
-        timeLeft = 15.0;
+        timeLeft = 20.0;
         if (timerEl) timerEl.textContent = timeLeft.toFixed(1);
         questionTimer = setInterval(() => {
             timeLeft = Math.max(0, +(timeLeft - 0.1).toFixed(1));
@@ -82,15 +93,19 @@
         }
         optionLis.forEach((li, i) => {
             li.textContent = q.options[i] || "";
-            li.classList.remove("active", "success", "wrong");
+            li.classList.remove("active", "success", "wrong", "highlight");
             li.style.pointerEvents = "auto";
         });
+        selectedIndex = 0;
+        updateKeyboardHighlight();
         if (scoreSpan) scoreSpan.textContent = String(rightAnswers);
 
         startQuestionTimer(() => {
             wrongAnswers++;
             if (scoreSpan) scoreSpan.textContent = String(rightAnswers);
             optionLis.forEach((li) => li.classList.add("wrong"));
+            soundWrong.currentTime = 0;
+            soundWrong.play();
             setTimeout(() => {
                 currentIndex++;
                 renderQuestion();
@@ -110,6 +125,8 @@
         if (chosen === right) {
             li.classList.add("success");
             rightAnswers++;
+            soundCorrect.currentTime = 0;
+            soundCorrect.play();
         } else {
             li.classList.add("wrong");
             wrongAnswers++;
@@ -117,6 +134,8 @@
                 (x) => x.textContent.trim().toLowerCase() === right
             );
             if (correctLi) correctLi.classList.add("success");
+            soundWrong.currentTime = 0;
+            soundWrong.play();
         }
         if (scoreSpan) scoreSpan.textContent = String(rightAnswers);
         setTimeout(() => {
@@ -213,13 +232,7 @@ function escapeHtml(s) {
     return String(s).replace(
         /[&<>"']/g,
         (c) =>
-            ({
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;",
-                "'": "&#39;",
-            }[c])
+            ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c])
     );
 }
 
@@ -232,40 +245,6 @@ function escapeHtml(s) {
             (
                 document.getElementById("playerName") || { value: "" }
             ).value.trim() || "Player";
-        const score =
-            Number(
-                (
-                    document.querySelector(".score .right span") || {
-                        textContent: "0",
-                    }
-                ).textContent
-            ) || 0;
-        const wrong =
-            Number(
-                (
-                    document.querySelector(".score .incorrect span") || {
-                        textContent: "0",
-                    }
-                ).textContent
-            ) || 0;
-        const time =
-            Math.round(
-                (Date.now() - (window.__quizStartTime || Date.now())) / 1000
-            ) || 0;
-        savePlayerData(name, score, wrong, time);
-        const modal = document.getElementById("nameModal");
-        if (modal) modal.style.display = "none";
-    });
-})();
-(function wireSave() {
-    const btn = document.getElementById("saveScoreBtn");
-    if (!btn) return;
-    btn.addEventListener("click", () => {
-        const name =
-            (
-                document.getElementById("playerName") || { value: "" }
-            ).value.trim() || "Player";
-        // infer score and wrong from DOM if possible
         const score =
             Number(
                 (
