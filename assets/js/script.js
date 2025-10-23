@@ -165,8 +165,8 @@ function moveToNextQuestion(questions, qCount) {
 function checkAnswer(rAnswer, count) {
   flagLis.forEach((li) => {
     if (li.classList.contains("active")) {
-      let choosenAnswer = li.innerHTML.toLowerCase();
-      if (rAnswer.toLowerCase() === choosenAnswer) {
+      let chosenAnswer = li.innerHTML.toLowerCase();
+      if (rAnswer.toLowerCase() === chosenAnswer) {
         li.classList.add("success");
         rightAnswers++;
       } else {
