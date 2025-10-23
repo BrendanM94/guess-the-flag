@@ -34,11 +34,17 @@
     soundWrong.volume = 0.6;
     soundPop.volume = 0.4;
 
-   
+    // 🎹 Keyboard navigation
+    let selectedIndex = 0;
+
+    function updateKeyboardHighlight() {
+        optionLis.forEach((li, i) => {
+            li.classList.toggle("highlight", i === selectedIndex);
+        });
+    }
 
     
-
-    function showError(msg) {
+  function showError(msg) {
         console.error(msg);
         if (appError) {
             appError.style.display = "block";
