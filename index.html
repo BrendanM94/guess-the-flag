@@ -15,15 +15,16 @@
     <main>
         <div class="container">
             <h1 onclick="location.reload()"><u>🌍flags of the world🌍</u></h1>
+            <!-- Visible error area for asset/load problems -->
+            <div id="appError"
+                style="display:none;padding:10px;margin:8px 0;border-radius:6px;background:#ffefef;color:#8a1f1f;border:1px solid #f2c6c6;">
+            </div>
             <div class="box">
                 <h3><u>Score:</u> <span></span></h3>
                 <div class="count">question: <span></span></div>
-                <div class="timer">⏳ Time left: <span id="timeLeft">10</span> seconds
-</div>
-               
-</div>
+                <div class="timer">⏳ Time left: <span id="timeLeft">10</span> seconds</div>
             </div>
-           
+
             <div class="flags">
                 <div class="flag-img">
                     <img src="">
@@ -43,33 +44,33 @@
                     <button id="newGame" type="button" hidden></button>
                 </div>
                 <!-- Leaderboard Section -->
-<!-- Add this below your quiz container -->
-<div class="leaderboard">
-  <h2>🏆 Leaderboard</h2>
-  <table id="leaderboardTable">
-    <thead>
-      <tr>
-        <th>Rank</th>
-        <th>Name</th>
-        <th>Score</th>
-        <th>Wrong</th>
-        <th>Time (s)</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
+                <!-- Add this below your quiz container -->
+                <div class="leaderboard">
+                    <h2>🏆 Leaderboard</h2>
+                    <table id="leaderboardTable">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Name</th>
+                                <th>Score</th>
+                                <th>Wrong</th>
+                                <th>Time (s)</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
 
 
-<!-- Modal for entering name -->
-<div id="nameModal" class="modal">
-  <div class="modal-content">
-    <h3>Enter Your Name</h3>
-    <input type="text" id="playerName" placeholder="Your name" />
-    <button id="saveScoreBtn">Save Score</button>
-  </div>
-</div>
+                <!-- Modal for entering name -->
+                <div id="nameModal" class="modal">
+                    <div class="modal-content">
+                        <h3>Enter Your Name</h3>
+                        <input type="text" id="playerName" placeholder="Your name" />
+                        <button id="saveScoreBtn">Save Score</button>
+                    </div>
+                </div>
 
 
 
@@ -82,4 +83,3 @@
 
 
 </html>
-
