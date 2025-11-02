@@ -34,6 +34,11 @@
             appError.textContent = msg;
         }
     }
+    const correctSound = new Audio("assets/sounds/correct-choice-43861.mp3");  
+const wrongSound   = new Audio("assets/sounds/wrong-47985.mp3");     
+
+function playCorrect() { correctSound.currentTime = 0; correctSound.play().catch(() => {}); }
+function playWrong()   { wrongSound.currentTime   = 0; wrongSound.play().catch(() => {}); }
 
     function fetchQuestions() {
         return fetch("assets/js/flag_questions.json").then((r) => {
@@ -89,6 +94,7 @@
 
         startQuestionTimer(() => {
             wrongAnswers++;
+            playWrong();                   // NEW
             if (scoreSpan) scoreSpan.textContent = String(rightAnswers);
             optionLis.forEach((li) => li.classList.add("wrong"));
             setTimeout(() => {
@@ -110,9 +116,11 @@
         if (chosen === right) {
             li.classList.add("success");
             rightAnswers++;
+            playCorrect();                 // NEW
         } else {
             li.classList.add("wrong");
             wrongAnswers++;
+            playWrong();                   // NEW
             const correctLi = optionLis.find(
                 (x) => x.textContent.trim().toLowerCase() === right
             );
@@ -257,37 +265,4 @@ function escapeHtml(s) {
         if (modal) modal.style.display = "none";
     });
 })();
-(function wireSave() {
-    const btn = document.getElementById("saveScoreBtn");
-    if (!btn) return;
-    btn.addEventListener("click", () => {
-        const name =
-            (
-                document.getElementById("playerName") || { value: "" }
-            ).value.trim() || "Player";
-        // infer score and wrong from DOM if possible
-        const score =
-            Number(
-                (
-                    document.querySelector(".score .right span") || {
-                        textContent: "0",
-                    }
-                ).textContent
-            ) || 0;
-        const wrong =
-            Number(
-                (
-                    document.querySelector(".score .incorrect span") || {
-                        textContent: "0",
-                    }
-                ).textContent
-            ) || 0;
-        const time =
-            Math.round(
-                (Date.now() - (window.__quizStartTime || Date.now())) / 1000
-            ) || 0;
-        savePlayerData(name, score, wrong, time);
-        const modal = document.getElementById("nameModal");
-        if (modal) modal.style.display = "none";
-    });
-})();
+
