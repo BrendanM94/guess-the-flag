@@ -265,37 +265,4 @@ function escapeHtml(s) {
         if (modal) modal.style.display = "none";
     });
 })();
-(function wireSave() {
-    const btn = document.getElementById("saveScoreBtn");
-    if (!btn) return;
-    btn.addEventListener("click", () => {
-        const name =
-            (
-                document.getElementById("playerName") || { value: "" }
-            ).value.trim() || "Player";
-        // infer score and wrong from DOM if possible
-        const score =
-            Number(
-                (
-                    document.querySelector(".score .right span") || {
-                        textContent: "0",
-                    }
-                ).textContent
-            ) || 0;
-        const wrong =
-            Number(
-                (
-                    document.querySelector(".score .incorrect span") || {
-                        textContent: "0",
-                    }
-                ).textContent
-            ) || 0;
-        const time =
-            Math.round(
-                (Date.now() - (window.__quizStartTime || Date.now())) / 1000
-            ) || 0;
-        savePlayerData(name, score, wrong, time);
-        const modal = document.getElementById("nameModal");
-        if (modal) modal.style.display = "none";
-    });
-})();
+
